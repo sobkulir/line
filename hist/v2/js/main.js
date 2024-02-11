@@ -7,6 +7,8 @@ let P_LINE_SPACING = 0.1;
 let P_LINE_COUNT = 150;
 let P_LINE_NOISE = 0.15;
 
+let c_WIDTH_PX = 800;
+
 class Point {
   constructor(x, y) {
       this.x = x;
@@ -31,6 +33,7 @@ function setup() {
     CANVAS = createCanvas(el.clientWidth, el.clientHeight);
     CANVAS.parent(CANVAS_ID);
     background(255);
+    c_WIDTH_PX = Math.floor(0.618 * width)
 }
 
 const polygonVertices = (x, y, radius, npoints) => {
@@ -88,9 +91,9 @@ function draw() {
 const perlinNoiseDensity = (lineIdx, y) => {
   noFill();
   beginShape();
-  const n = 800;
+  const n = c_WIDTH_PX + Math.floor(10*(noise(frameCount / 400 + lineIdx/50) - 0.5));
   for (let i = 0; i < n; i++) {
-    vertex(i, y + 200 *  (noise(P_LINE_NOISE * (lineIdx /P_LINE_COUNT) - P_LINE_NOISE / 2, i * P_ZOOM / n - P_ZOOM + frameCount / 200) - 0.5));
+    vertex(i, y + 200 *  (noise(P_LINE_NOISE * (lineIdx /P_LINE_COUNT) - P_LINE_NOISE / 2, i * P_ZOOM / c_WIDTH_PX - P_ZOOM + frameCount / 200) - 0.5));
   }
   endShape();
 
