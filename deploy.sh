@@ -35,10 +35,8 @@ fi
 
 mkdir -p hist/${version_name}
 cp -r src/* hist/${version_name}
-mv src/css css
-mv src/js js
-mv src/index.html index.html
 rm -rf src
+ln -sf hist/${version_name}/index.html index.html
 
 touch .nojekyll
 date > version.txt
