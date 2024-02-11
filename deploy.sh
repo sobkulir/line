@@ -9,7 +9,7 @@ then
 fi
 
 commit_id=$(git show-ref --head | head -c6)
-git checkout gh-pages
+git switch -c gh-pages
 git checkout main -- src
 
 version_name=${commit_id}
