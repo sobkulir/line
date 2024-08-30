@@ -2,7 +2,6 @@ let CANVAS = null;
 const CANVAS_ID = "main-canvas";
 
 const controlsTxt = 'Controls: Arrow keys, D and F.'
-console.log(controlsTxt)
 
 let P_ZOOM = 0.8;
 let P_LINE_SPACING = 0.1;
@@ -57,12 +56,19 @@ function draw() {
 
 const perlinNoiseDensity = (lineIdx, y) => {
   noFill();
-  beginShape();
   const n = c_WIDTH_PX + Math.floor(10*(noise(frameCount / 400 + lineIdx/50) - 0.5));
-  for (let i = 0; i < n; i++) {
-    vertex(i, y + 200 *  (noise(P_LINE_NOISE * (lineIdx /P_LINE_COUNT) - P_LINE_NOISE / 2, i * P_ZOOM / c_WIDTH_PX - P_ZOOM + frameCount / 200) - 0.5));
+
+  // On Safari, there were vertical artifacts in lines when the lines
+  // were created as a single shape. Issue: https://github.com/processing/p5.js/issues/5980
+  // Because the artifacts only appeared for lines bigger than ~200px, below
+  // "fix" splits the line into multiple <=100px lines.
+  for (let k = 0; k < n; k += 100) {
+    beginShape();
+    strokeCap(SQUARE)
+    const end = Math.min(n, k+100);
+    for (let i = k; i < end + 1; i++) {
+      vertex(i, y + 200 *  (noise(P_LINE_NOISE * (lineIdx /P_LINE_COUNT) - P_LINE_NOISE / 2, i * P_ZOOM / c_WIDTH_PX - P_ZOOM + frameCount / 200) - 0.5)); 
+    }
+    endShape();
   }
-  endShape();
-
-
 }
